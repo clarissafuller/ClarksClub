@@ -1,33 +1,12 @@
-import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "@/src/components/EditScreenInfo";
-import { Text, View } from "@/src/components/Themed";
-import recipes from "../../../assets/data/recipes";
-
-const recipe = recipes[0];
+import RecipeListItem from "@/src/components/RecipeListItem";
+import { View } from "react-native";
+import recipes from "@/assets/data/recipes";
 
 export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{recipe.name}</Text>
-      <Text>{recipe.description}</Text>
+    <View>
+      <RecipeListItem recipe={recipes[0]} />
+      <RecipeListItem recipe={recipes[1]} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
