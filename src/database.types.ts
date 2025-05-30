@@ -4,155 +4,266 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
+  | Json[];
 
 export interface Database {
   public: {
     Tables: {
-      order_items: {
+      users: {
         Row: {
-          created_at: string
-          id: number
-          order_id: number
-          product_id: number
-          quantity: number
-          size: string
-        }
+          id: string;
+          first_name: string;
+          last_name: string;
+          email: string;
+          password: string;
+          created_at: string;
+        };
         Insert: {
-          created_at?: string
-          id?: number
-          order_id: number
-          product_id: number
-          quantity?: number
-          size?: string
-        }
+          id: string;
+          first_name: string;
+          last_name: string;
+          email: string;
+          password: string;
+          created_at?: string;
+        };
         Update: {
-          created_at?: string
-          id?: number
-          order_id?: number
-          product_id?: number
-          quantity?: number
-          size?: string
-        }
+          id?: string;
+          first_name?: string;
+          last_name?: string;
+          email?: string;
+          password?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
+      recipes: {
+        Row: {
+          id: string;
+          created_at: string;
+          title: string;
+          description: string;
+          user_id: string;
+          servings: number;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          title: string;
+          description: string;
+          user_id: string;
+          servings: number;
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          title?: string;
+          description?: string;
+          user_id?: string;
+          servings?: number;
+        };
         Relationships: [
           {
-            foreignKeyName: "order_items_order_id_fkey"
-            columns: ["order_id"]
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
+            foreignKeyName: "recipes_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+
+      ingredients: {
+        Row: {
+          id: string;
+          name: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+
+      measurements: {
+        Row: {
+          id: string;
+          unit: string;
+          abbreviation: string;
+        };
+        Insert: {
+          id?: string;
+          unit: string;
+          abbreviation: string;
+        };
+        Update: {
+          id?: string;
+          unit?: string;
+          abbreviation?: string;
+        };
+        Relationships: [];
+      };
+
+      recipe_ingredients: {
+        Row: {
+          id: string;
+          recipe_id: string;
+          ingredient_id: string;
+          measurement_id: string;
+          quantity: number;
+          note: string;
+        };
+        Insert: {
+          id?: string;
+          recipe_id: string;
+          ingredient_id: string;
+          measurement_id: string;
+          quantity: number;
+          note: string;
+        };
+        Update: {
+          id?: string;
+          recipe_id?: string;
+          ingredient_id?: string;
+          measurement_id?: string;
+          quantity?: number;
+          note?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "recipe_ingredients_recipe_id_fkey";
+            columns: ["recipe_id"];
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "order_items_product_id_fkey"
-            columns: ["product_id"]
-            referencedRelation: "products"
-            referencedColumns: ["id"]
+            foreignKeyName: "recipe_ingredients_ingredient_id_fkey";
+            columns: ["ingredient_id"];
+            referencedRelation: "ingredients";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "recipe_ingredients_measurement_id_fkey";
+            columns: ["measurement_id"];
+            referencedRelation: "measurements";
+            referencedColumns: ["id"];
           }
-        ]
-      }
-      orders: {
+        ];
+      };
+
+      instructions: {
         Row: {
-          created_at: string
-          id: number
-          status: string
-          total: number
-          user_id: string | null
-        }
+          id: string;
+          recipe_id: string;
+          step_number: number;
+          instruction: string;
+        };
         Insert: {
-          created_at?: string
-          id?: number
-          status?: string
-          total?: number
-          user_id?: string | null
-        }
+          id?: string;
+          recipe_id: string;
+          step_number: number;
+          instruction: string;
+        };
         Update: {
-          created_at?: string
-          id?: number
-          status?: string
-          total?: number
-          user_id?: string | null
-        }
+          id?: string;
+          recipe_id?: string;
+          step_number?: number;
+          instruction?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "orders_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            foreignKeyName: "instructions_recipe_id_fkey";
+            columns: ["recipe_id"];
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
           }
-        ]
-      }
-      products: {
+        ];
+      };
+
+      meal_plans: {
         Row: {
-          created_at: string
-          id: number
-          image: string | null
-          name: string
-          price: number
-        }
+          id: number;
+          created_at: string;
+          start_date: string;
+          end_date: string;
+        };
         Insert: {
-          created_at?: string
-          id?: number
-          image?: string | null
-          name: string
-          price: number
-        }
+          id?: number;
+          created_at?: string;
+          start_date: string;
+          end_date: string;
+        };
         Update: {
-          created_at?: string
-          id?: number
-          image?: string | null
-          name?: string
-          price?: number
-        }
-        Relationships: []
-      }
-      profiles: {
+          id?: number;
+          created_at?: string;
+          start_date?: string;
+          end_date?: string;
+        };
+        Relationships: [];
+      };
+
+      meal_plan_recipes: {
         Row: {
-          avatar_url: string | null
-          full_name: string | null
-          group: string
-          id: string
-          updated_at: string | null
-          username: string | null
-          website: string | null
-        }
+          id: string;
+          created_at: string;
+          day_of_week: string;
+          meal_time: string;
+          scaled_servings: number;
+          meal_plan_id: number;
+          recipe_id: string;
+        };
         Insert: {
-          avatar_url?: string | null
-          full_name?: string | null
-          group?: string
-          id: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
+          id?: string;
+          created_at?: string;
+          day_of_week: string;
+          meal_time: string;
+          scaled_servings: number;
+          meal_plan_id: number;
+          recipe_id: string;
+        };
         Update: {
-          avatar_url?: string | null
-          full_name?: string | null
-          group?: string
-          id?: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
+          id?: string;
+          created_at?: string;
+          day_of_week?: string;
+          meal_time?: string;
+          scaled_servings?: number;
+          meal_plan_id?: number;
+          recipe_id?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "meal_plan_recipes_meal_plan_id_fkey";
+            columns: ["meal_plan_id"];
+            referencedRelation: "meal_plans";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "meal_plan_recipes_recipe_id_fkey";
+            columns: ["recipe_id"];
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
           }
-        ]
-      }
-    }
+        ];
+      };
+    };
+
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
+
     Functions: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
+
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
+
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
+      [_ in never]: never;
+    };
+  };
 }
